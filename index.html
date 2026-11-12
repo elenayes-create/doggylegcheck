@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>멍냥닥터 - 강아지 슬개골 탈구 자가진단</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-16">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
+          <i data-lucide="stethoscope" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg text-slate-900 leading-tight">멍냥닥터 슬개골 체크</h1>
+          <p class="text-xs text-slate-500">우리 아이 다리 건강 &amp; 슬개골 탈구 자가진단</p>
+        </div>
+      </div>
+      <button onclick="openModal('settingsModal')" class="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition" title="구글 시트 연동 설정">
+        <i data-lucide="settings" class="w-5 h-5"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 pt-6 space-y-6">
+    <!-- 기본 정보 입력 카드 -->
+    <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-4">
+      <div class="flex items-center gap-2 text-emerald-700 font-semibold">
+        <i data-lucide="dog" class="w-5 h-5"></i>
+        <h2>반려견 기본 정보</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">이름</label>
+          <input type="text" id="petName" placeholder="예: 초코" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">나이 (살)</label>
+          <input type="number" id="petAge" placeholder="예: 3" min="0" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">체중 (kg)</label>
+          <input type="number" id="petWeight" step="0.1" placeholder="예: 4.5" min="0" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 자가진단 체크리스트 -->
+    <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2 text-emerald-700 font-semibold">
+          <i data-lucide="check-square" class="w-5 h-5"></i>
+          <h2>행동 및 증상 체크리스트</h2>
+        </div>
+        <span class="text-xs text-slate-400">해당하는 항목을 모두 선택하세요</span>
+      </div>
+
+      <div id="checklistContainer" class="space-y-2.5"></div>
+
+      <button onclick="evaluateCheck()" class="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3.5 rounded-xl shadow-sm transition flex items-center justify-center gap-2">
+        <i data-lucide="activity" class="w-5 h-5"></i>
+        <span>진단 결과 확인하기</span>
+      </button>
+    </section>
+
+    <!-- 진단 결과 영역 -->
+    <section id="resultSection" class="hidden bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div>
+          <span id="resultBadge" class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-1.5"></span>
+          <h3 id="resultTitle" class="text-xl font-bold text-slate-900"></h3>
+        </div>
+        <div class="text-right">
+          <span class="text-xs text-slate-400 block">체크 항목</span>
+          <span id="resultScore" class="text-2xl font-extrabold text-emerald-600">0 / 8</span>
+        </div>
+      </div>
+
+      <p id="resultDesc" class="text-sm text-slate-600 leading-relaxed"></p>
+
+      <div class="bg-slate-50 rounded-xl p-4 space-y-2">
+        <h4 class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+          <i data-lucide="info" class="w-4 h-4 text-emerald-600"></i>
+          권장 관리 가이드
+        </h4>
+        <ul id="resultTips" class="text-xs text-slate-600 space-y-1.5 list-disc list-inside"></ul>
+      </div>
+
+      <div class="pt-2 flex flex-col sm:flex-row gap-2.5">
+        <button onclick="saveToGoogleSheet()" id="saveSheetBtn" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium py-3 rounded-xl transition flex items-center justify-center gap-2">
+          <i data-lucide="cloud-upload" class="w-4 h-4"></i>
+          <span>구글 시트에 기록 저장하기</span>
+        </button>
+        <button onclick="resetForm()" class="px-5 py-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 text-sm font-medium transition">
+          다시 검사하기
+        </button>
+      </div>
+      <p id="saveStatus" class="text-xs text-center hidden"></p>
+    </section>
+  </main>
+
+  <!-- 구글 시트 연동 설정 모달 -->
+  <div id="settingsModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-lg text-slate-900 flex items-center gap-2">
+          <i data-lucide="table" class="w-5 h-5 text-emerald-600"></i>
+          구글 시트 연동 설정
+        </h3>
+        <button onclick="closeModal('settingsModal')" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-500 leading-relaxed">
+        Google Apps Script 웹 앱 URL을 입력하면 진단 결과를 구글 스프레드시트에 자동으로 누적 저장할 수 있습니다.
+      </p>
+      <div>
+        <label class="block text-xs font-semibold text-slate-700 mb-1">Apps Script 웹 앱 URL</label>
+        <input type="url" id="sheetUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('settingsModal')" class="px-4 py-2 rounded-xl text-sm text-slate-600 hover:bg-slate-100">취소</button>
+        <button onclick="saveSettings()" class="px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-600 hover:bg-emerald-700 text-white">설정 저장</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const checklistItems = [
+      { id: 1, text: "산책 중 갑자기 한쪽 뒷다리를 들고 깽깽이걸음(3발 걷기)을 한다.", weight: 2 },
+      { id: 2, text: "앉을 때 다리를 한쪽으로 삐딱하게 빼고 앉는 습관이 있다.", weight: 1 },
+      { id: 3, text: "뒷다리를 뒤로 쭉 뻗으며 기지개를 켜는 행동이 잦아졌다.", weight: 1 },
+      { id: 4, text: "무릎 부위를 만지거나 굽힐 때 '뚝' 하는 소리나 걸리는 느낌이 난다.", weight: 2 },
+      { id: 5, text: "소파나 침대 위로 뛰어오르기를 주저하거나 점프력이 떨어졌다.", weight: 1 },
+      { id: 6, text: "뒷다리 근육이 이전보다 얇아지거나 좌우 다리 굵기 차이가 보인다.", weight: 2 },
+      { id: 7, text: "무릎 주변을 유독 자주 핥거나 만지려 하면 예민하게 반응한다.", weight: 1 },
+      { id: 8, text: "걸을 때 엉덩이를 심하게 흔들거나 뒷다리가 안쪽/바깥쪽으로 휘어 보인다.", weight: 2 }
+    ];
+
+    let latestEvaluation = null;
+
+    function init() {
+      const container = document.getElementById('checklistContainer');
+      container.innerHTML = checklistItems.map(item => `
+        <label class="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/30 cursor-pointer transition select-none">
+          <input type="checkbox" value="${item.id}" data-weight="${item.weight}" class="check-item mt-0.5 w-4 h-4 accent-emerald-600 rounded" />
+          <span class="text-sm text-slate-700 leading-snug">${item.text}</span>
+        </label>
+      `).join('');
+
+      const savedUrl = localStorage.getItem('googleSheetWebAppUrl');
+      if (savedUrl) {
+        document.getElementById('sheetUrlInput').value = savedUrl;
+      }
+      lucide.createIcons();
+    }
+
+    function evaluateCheck() {
+      const checked = Array.from(document.querySelectorAll('.check-item:checked'));
+      const count = checked.length;
+      const score = checked.reduce((sum, el) => sum + Number(el.dataset.weight), 0);
+      const petName = document.getElementById('petName').value.trim() || '우리 아이';
+
+      let level, badgeClass, title, desc, tips;
+
+      if (count === 0) {
+        level = '양호 (정상 범위)';
+        badgeClass = 'bg-emerald-100 text-emerald-700';
+        title = `${petName}, 현재 특이 증상이 보이지 않아요`;
+        desc = '슬개골 탈구 의심 증상이 체크되지 않았습니다. 다만 소형견은 선천적으로 슬개골이 약한 경우가 많으므로 꾸준한 예방 관리가 중요합니다.';
+        tips = [
+          '미끄러운 마룻바닥에는 논슬립 매트를 깔아 관절 부담을 줄여주세요.',
+          '적정 체중을 유지해 무릎 관절에 가해지는 하중을 관리해 주세요.',
+          '발바닥 털과 발톱을 주기적으로 정리해 미끄러짐을 방지하세요.'
+        ];
+      } else if (score <= 4) {
+        level = '주의 (1~2기 의심)';
+        badgeClass = 'bg-amber-100 text-amber-700';
+        title = `${petName}, 초기 슬개골 탈구 징후가 의심됩니다`;
+        desc = '간헐적인 탈구(1~2기) 단계에서 흔히 나타나는 행동들이 확인되었습니다. 통증이 심하지 않아 보호자가 놓치기 쉬운 시기이므로 환경 개선과 정기 검진이 필요합니다.';
+        tips = [
+          '두 발로 서기, 높은 곳에서 뛰어내리기, 과격한 우다다를 제한해 주세요.',
+          '실내 계단(펫스텝)을 설치하고 미끄럼 방지 매트를 보강하세요.',
+          '동물병원 내원 시 무릎 촉진 검사를 받아 정확한 기수를 확인해 보세요.'
+        ];
+      } else {
+        level = '위험 (2~3기 이상 의심)';
+        badgeClass = 'bg-rose-100 text-rose-700';
+        title = `${petName}, 빠른 시일 내 수의사 진찰이 필요합니다`;
+        desc = '슬개골이 자주 빠지거나 고정된 상태(2~3기 이상)일 가능성이 높습니다. 방치할 경우 십자인대 파열이나 관절염으로 진행될 수 있습니다.';
+        tips = [
+          '무리한 산책이나 격한 놀이는 즉시 중단하고 안정을 취하게 해주세요.',
+          '가까운 동물병원에 방문하여 정형외과 촉진 및 X-ray 검사를 권장합니다.',
+          '체중 감량 및 관절 영양제 급여 여부를 수의사와 상담하세요.'
+        ];
+      }
+
+      document.getElementById('resultBadge').className = `inline-block px-3 py-1 rounded-full text-xs font-bold mb-1.5 ${badgeClass}`;
+      document.getElementById('resultBadge').textContent = level;
+      document.getElementById('resultTitle').textContent = title;
+      document.getElementById('resultScore').textContent = `${count} / ${checklistItems.length}`;
+      document.getElementById('resultDesc').textContent = desc;
+      document.getElementById('resultTips').innerHTML = tips.map(t => `<li>${t}</li>`).join('');
+
+      const resultSec = document.getElementById('resultSection');
+      resultSec.classList.remove('hidden');
+      resultSec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      latestEvaluation = {
+        date: new Date().toLocaleString('ko-KR'),
+        name: petName,
+        age: document.getElementById('petAge').value || '-',
+        weight: document.getElementById('petWeight').value || '-',
+        checkedCount: count,
+        score: score,
+        level: level
+      };
+    }
+
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function saveSettings() {
+      const url = document.getElementById('sheetUrlInput').value.trim();
+      localStorage.setItem('googleSheetWebAppUrl', url);
+      closeModal('settingsModal');
+      alert('구글 시트 연동 URL이 저장되었습니다.');
+    }
+
+    async function saveToGoogleSheet() {
+      const url = localStorage.getItem('googleSheetWebAppUrl');
+      const statusEl = document.getElementById('saveStatus');
+
+      if (!url) {
+        openModal('settingsModal');
+        return;
+      }
+      if (!latestEvaluation) return;
+
+      const btn = document.getElementById('saveSheetBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span>저장 중...</span>';
+
+      try {
+        await fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(latestEvaluation)
+        });
+        statusEl.textContent = '구글 시트로 기록이 전송되었습니다.';
+        statusEl.className = 'text-xs text-center text-emerald-600 font-medium block';
+      } catch (err) {
+        statusEl.textContent = '전송 중 오류가 발생했습니다. URL을 확인해 주세요.';
+        statusEl.className = 'text-xs text-center text-rose-600 font-medium block';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i data-lucide="cloud-upload" class="w-4 h-4"></i><span>구글 시트에 기록 저장하기</span>';
+        lucide.createIcons();
+      }
+    }
+
+    function resetForm() {
+      document.querySelectorAll('.check-item').forEach(cb => cb.checked = false);
+      document.getElementById('resultSection').classList.add('hidden');
+      document.getElementById('saveStatus').classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    init();
+  </script>
+</body>
+</html>
