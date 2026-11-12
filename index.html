@@ -110,8 +110,8 @@
                         <option value="믹스견">믹스견</option>
                         <option value="기타">기타 (직접 입력)</option>
                     </select>
-                    <input type="text" id="customBreed" placeholder="견종 직접 입력" 
-                        class="hidden w-full mt-1.5 px-3 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                    <input type="text" id="customBreed" placeholder="견종명을 직접 입력하세요" style="display: none;"
+                        class="w-full mt-2 px-3 py-2 border border-amber-400 bg-amber-50/40 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
                 </div>
                 <div>
                     <label for="dogAgeMonths" class="block text-xs font-semibold text-slate-600 mb-1">나이 (개월 수)</label>
@@ -144,7 +144,7 @@
         </div>
 
         <!-- Checklist Categories -->
-        <form id="checklistForm" class="space-y-6">
+        <form id="checklistForm" class="space-y-6" onsubmit="return false;">
 
             <!-- Category 1: 초기 (1기 추정) -->
             <section class="bg-white rounded-2xl border border-emerald-100 shadow-sm overflow-hidden">
@@ -263,7 +263,7 @@
             </section>
 
             <div class="flex justify-center pt-2 no-print">
-                <button type="button" onclick="evaluateChecklist()" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/20 flex items-center justify-center space-x-2 transition transform active:scale-95">
+                <button type="button" id="evaluateBtn" onclick="evaluateChecklist()" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/20 flex items-center justify-center space-x-2 transition transform active:scale-95 cursor-pointer">
                     <i data-lucide="stethoscope" class="w-5 h-5 flex-shrink-0"></i>
                     <span class="whitespace-nowrap">진단 결과 및 가이드 확인하기</span>
                 </button>
@@ -271,10 +271,10 @@
         </form>
 
         <!-- Result View Section (Hidden by default) -->
-        <section id="resultSection" class="hidden mt-8 space-y-6">
+        <section id="resultSection" style="display: none;" class="mt-8 space-y-6">
 
             <!-- Urgent Red Alert Modal/Card for Category 3 -->
-            <div id="urgentAlertCard" class="hidden bg-rose-600 text-white rounded-2xl p-5 sm:p-6 shadow-xl border-2 border-rose-700">
+            <div id="urgentAlertCard" style="display: none;" class="bg-rose-600 text-white rounded-2xl p-5 sm:p-6 shadow-xl border-2 border-rose-700">
                 <div class="flex items-start space-x-3.5 sm:space-x-4">
                     <div class="p-2.5 sm:p-3 bg-white/20 rounded-xl flex-shrink-0">
                         <i data-lucide="alert-triangle" class="w-7 h-7 sm:w-8 sm:h-8 text-white"></i>
@@ -308,7 +308,7 @@
                     </div>
                 </div>
 
-                <!-- 요약 카드 3종 (모바일 줄바꿈 깨짐 완벽 방지) -->
+                <!-- 요약 카드 3종 -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex sm:block items-center justify-between">
                         <div class="text-xs text-slate-500 sm:mb-1 whitespace-nowrap">총 체크 항목 수</div>
@@ -349,7 +349,7 @@
                         <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
                         <span>가정 내 슬개골 관절 보호 수칙</span>
                     </h4>
-                    <div id="customCareTip" class="hidden mb-3 p-3 bg-emerald-50/80 border border-emerald-200 rounded-xl text-xs text-emerald-900 leading-relaxed">
+                    <div id="customCareTip" style="display: none;" class="mb-3 p-3 bg-emerald-50/80 border border-emerald-200 rounded-xl text-xs text-emerald-900 leading-relaxed">
                         <!-- Breed / Age / Weight specific tip injected by JS -->
                     </div>
                     <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600">
@@ -385,7 +385,7 @@
 
                 <!-- Actions / Buttons (프린트/PDF 저장만 노출) -->
                 <div class="mt-6 pt-4 border-t border-slate-100 flex justify-end items-center no-print">
-                    <button onclick="window.print()" class="w-full sm:w-auto justify-center px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-sm font-semibold flex items-center space-x-2 shadow-sm transition">
+                    <button type="button" onclick="window.print()" class="w-full sm:w-auto justify-center px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-sm font-semibold flex items-center space-x-2 shadow-sm transition cursor-pointer">
                         <i data-lucide="printer" class="w-4 h-4"></i>
                         <span>평가서 프린트 / PDF 저장</span>
                     </button>
@@ -431,80 +431,101 @@
             10: "10. 뒷다리가 구부정한 채 엉거주춤 보행한다. (위중🚨)"
         };
 
-        // App Initialization
-        document.addEventListener("DOMContentLoaded", () => {
-            lucide.createIcons();
+        function safeCreateIcons() {
+            try {
+                if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                    window.lucide.createIcons();
+                }
+            } catch (e) {
+                console.warn('Icon render skipped:', e);
+            }
+        }
 
-            // Form inputs change listener
-            document.querySelectorAll('input[name="item"]').forEach(checkbox => {
+        // App Initialization
+        document.addEventListener("DOMContentLoaded", function() {
+            safeCreateIcons();
+
+            document.querySelectorAll('input[name="item"]').forEach(function(checkbox) {
                 checkbox.addEventListener('change', updateProgress);
             });
 
-            // Date setup
-            const today = new Date();
-            document.getElementById('currentDate').innerText = today.toLocaleDateString('ko-KR', {
-                year: 'numeric', month: 'long', day: 'numeric'
-            });
+            var breedSelect = document.getElementById('dogBreed');
+            if (breedSelect) {
+                breedSelect.addEventListener('change', toggleCustomBreed);
+            }
+
+            var today = new Date();
+            var dateEl = document.getElementById('currentDate');
+            if (dateEl) {
+                dateEl.innerText = today.toLocaleDateString('ko-KR', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+            }
         });
 
-        // Toggle Custom Breed Input
+        // Toggle Custom Breed Input (확실한 표시 제어)
         function toggleCustomBreed() {
-            const select = document.getElementById('dogBreed');
-            const customInput = document.getElementById('customBreed');
+            var select = document.getElementById('dogBreed');
+            var customInput = document.getElementById('customBreed');
+            if (!select || !customInput) return;
+
             if (select.value === '기타') {
+                customInput.style.display = 'block';
                 customInput.classList.remove('hidden');
-                customInput.focus();
+                setTimeout(function() { customInput.focus(); }, 50);
             } else {
+                customInput.style.display = 'none';
                 customInput.classList.add('hidden');
+                customInput.value = '';
             }
         }
 
         // Helper to collect formatted dog info
         function getDogInfo() {
-            const name = document.getElementById('dogName').value.trim() || '우리 반려견';
-            const breedSelect = document.getElementById('dogBreed').value;
-            const breed = breedSelect === '기타' 
+            var name = document.getElementById('dogName').value.trim() || '우리 반려견';
+            var breedSelect = document.getElementById('dogBreed').value;
+            var breed = breedSelect === '기타' 
                 ? (document.getElementById('customBreed').value.trim() || '기타 견종') 
                 : breedSelect;
-            const ageMonths = document.getElementById('dogAgeMonths').value.trim();
-            const weight = document.getElementById('dogWeight').value.trim();
+            var ageMonths = document.getElementById('dogAgeMonths').value.trim();
+            var weight = document.getElementById('dogWeight').value.trim();
 
-            const details = [];
+            var details = [];
             if (breed) details.push(breed);
             if (ageMonths) {
-                const years = Math.floor(ageMonths / 12);
-                const months = ageMonths % 12;
-                const ageStr = years > 0 ? `${ageMonths}개월(약 ${years}살${months > 0 ? ' ' + months + '개월' : ''})` : `${ageMonths}개월`;
+                var years = Math.floor(ageMonths / 12);
+                var months = ageMonths % 12;
+                var ageStr = years > 0 ? ageMonths + '개월(약 ' + years + '살' + (months > 0 ? ' ' + months + '개월' : '') + ')' : ageMonths + '개월';
                 details.push(ageStr);
             }
-            if (weight) details.push(`${weight}kg`);
+            if (weight) details.push(weight + 'kg');
 
             return {
-                name,
+                name: name,
                 breed: breed || '미입력',
-                ageMonths: ageMonths ? `${ageMonths}개월` : '미입력',
-                weight: weight ? `${weight}kg` : '미입력',
-                rawAge: parseInt(ageMonths) || 0,
+                ageMonths: ageMonths ? ageMonths + '개월' : '미입력',
+                weight: weight ? weight + 'kg' : '미입력',
+                rawAge: parseInt(ageMonths, 10) || 0,
                 rawWeight: parseFloat(weight) || 0,
-                displayTitle: details.length > 0 ? `${name} (${details.join(' / ')})` : name
+                displayTitle: details.length > 0 ? name + ' (' + details.join(' / ') + ')' : name
             };
         }
 
         // Update progress bar
         function updateProgress() {
-            const checkedBoxes = document.querySelectorAll('input[name="item"]:checked');
-            const count = checkedBoxes.length;
-            const percentage = (count / 10) * 100;
+            var checkedBoxes = document.querySelectorAll('input[name="item"]:checked');
+            var count = checkedBoxes.length;
+            var percentage = (count / 10) * 100;
             
             document.getElementById('checkedCount').innerText = count;
             document.getElementById('progressBar').style.width = percentage + '%';
 
-            const badge = document.getElementById('stageBadge');
-            let hasCat3 = false;
-            let hasCat2 = false;
+            var badge = document.getElementById('stageBadge');
+            var hasCat3 = false;
+            var hasCat2 = false;
 
-            checkedBoxes.forEach(cb => {
-                const cat = cb.getAttribute('data-category');
+            checkedBoxes.forEach(function(cb) {
+                var cat = cb.getAttribute('data-category');
                 if (cat === '3') hasCat3 = true;
                 if (cat === '2') hasCat2 = true;
             });
@@ -526,168 +547,168 @@
 
         // Main Diagnostic Evaluation Logic
         function evaluateChecklist() {
-            const checkedBoxes = document.querySelectorAll('input[name="item"]:checked');
-            const count = checkedBoxes.length;
+            try {
+                var checkedBoxes = document.querySelectorAll('input[name="item"]:checked');
+                var count = checkedBoxes.length;
 
-            let hasCategory1 = false;
-            let hasCategory2 = false;
-            let hasCategory3 = false;
-            const checkedItems = [];
+                var hasCategory1 = false;
+                var hasCategory2 = false;
+                var hasCategory3 = false;
+                var checkedItems = [];
 
-            checkedBoxes.forEach(cb => {
-                const cat = cb.getAttribute('data-category');
-                const val = parseInt(cb.value);
-                if (cat === '1') hasCategory1 = true;
-                if (cat === '2') hasCategory2 = true;
-                if (cat === '3') hasCategory3 = true;
-                checkedItems.push(itemLabels[val]);
-            });
-
-            const dogInfo = getDogInfo();
-            document.getElementById('resDogName').innerText = dogInfo.displayTitle;
-            document.getElementById('resCheckedCount').innerText = count;
-
-            // Generate Personalized Care Tip based on Breed, Age, Weight
-            const customTipEl = document.getElementById('customCareTip');
-            let tips = [];
-            const highRiskBreeds = ['포메라니안', '말티즈', '푸들', '치와와', '요크셔테리어'];
-
-            if (highRiskBreeds.includes(dogInfo.breed)) {
-                tips.push(`<b>[${dogInfo.breed} 맞춤 케어]</b> 선천적으로 무릎 도르래 고랑이 얕은 고위험 견종입니다. 실내 미끄럼 방지와 뒷다리 근육(대퇴사두근) 유지가 필수적입니다.`);
-            } else if (dogInfo.breed === '웰시코기/닥스훈트') {
-                tips.push(`<b>[${dogInfo.breed} 맞춤 케어]</b> 허리가 길고 다리가 짧은 체형 특성상 슬개골과 함께 척추(디스크)에 하중이 쏠리기 쉬우므로 계단 오르내리기와 점프를 엄격히 제한해 주세요.`);
-            }
-
-            if (dogInfo.rawAge > 0 && dogInfo.rawAge < 12) {
-                tips.push(`<b>[성장기 주의]</b> 생후 ${dogInfo.rawAge}개월은 뼈와 인대가 성장하는 시기이므로 과격한 우다다나 높은 곳에서의 착지를 특히 조심해야 합니다.`);
-            } else if (dogInfo.rawAge >= 84) {
-                tips.push(`<b>[노령견 케어]</b> 만 7세 이상의 노령견은 연골 마모로 인한 퇴행성 관절염이 동반되기 쉬우므로 정기적인 관절 영양제 급여와 가벼운 평지 산책을 권장합니다.`);
-            }
-
-            if (dogInfo.rawWeight > 0 && highRiskBreeds.includes(dogInfo.breed) && dogInfo.rawWeight >= 5.0) {
-                tips.push(`<b>[체중 관리 권고]</b> 소형견 기준 체중(${dogInfo.rawWeight}kg)이 다소 나가는 편입니다. 체중을 10%만 감량해도 무릎 관절 하중이 크게 줄어듭니다.`);
-            }
-
-            if (tips.length > 0) {
-                customTipEl.innerHTML = tips.join('<br class="my-1">');
-                customTipEl.classList.remove('hidden');
-            } else {
-                customTipEl.classList.add('hidden');
-            }
-
-            const urgentCard = document.getElementById('urgentAlertCard');
-            const maxStageEl = document.getElementById('resMaxStage');
-            const actionLevelEl = document.getElementById('resActionLevel');
-            const opinionEl = document.getElementById('resOpinion');
-            const checkedListEl = document.getElementById('resCheckedItemsList');
-
-            // Render Checked List
-            checkedListEl.innerHTML = '';
-            if (checkedItems.length === 0) {
-                checkedListEl.innerHTML = '<li class="text-slate-400 italic">선택된 증상이 없습니다. 현재 매우 양호한 상태입니다.</li>';
-            } else {
-                checkedItems.forEach(item => {
-                    const li = document.createElement('li');
-                    li.className = 'flex items-start space-x-2 bg-slate-50 px-3 py-2 rounded-lg border border-slate-100';
-                    li.innerHTML = `<span class="text-amber-500 font-bold">•</span> <span>${item}</span>`;
-                    checkedListEl.appendChild(li);
+                checkedBoxes.forEach(function(cb) {
+                    var cat = cb.getAttribute('data-category');
+                    var val = parseInt(cb.value, 10);
+                    if (cat === '1') hasCategory1 = true;
+                    if (cat === '2') hasCategory2 = true;
+                    if (cat === '3') hasCategory3 = true;
+                    checkedItems.push(itemLabels[val]);
                 });
+
+                var dogInfo = getDogInfo();
+                document.getElementById('resDogName').innerText = dogInfo.displayTitle;
+                document.getElementById('resCheckedCount').innerText = count;
+
+                // Generate Personalized Care Tip based on Breed, Age, Weight
+                var customTipEl = document.getElementById('customCareTip');
+                var tips = [];
+                var highRiskBreeds = ['포메라니안', '말티즈', '푸들', '치와와', '요크셔테리어'];
+
+                if (highRiskBreeds.indexOf(dogInfo.breed) !== -1) {
+                    tips.push('<b>[' + dogInfo.breed + ' 맞춤 케어]</b> 선천적으로 무릎 도르래 고랑이 얕은 고위험 견종입니다. 실내 미끄럼 방지와 뒷다리 근육(대퇴사두근) 유지가 필수적입니다.');
+                } else if (dogInfo.breed === '웰시코기/닥스훈트') {
+                    tips.push('<b>[' + dogInfo.breed + ' 맞춤 케어]</b> 허리가 길고 다리가 짧은 체형 특성상 슬개골과 함께 척추(디스크)에 하중이 쏠리기 쉬우므로 계단 오르내리기와 점프를 엄격히 제한해 주세요.');
+                }
+
+                if (dogInfo.rawAge > 0 && dogInfo.rawAge < 12) {
+                    tips.push('<b>[성장기 주의]</b> 생후 ' + dogInfo.rawAge + '개월은 뼈와 인대가 성장하는 시기이므로 과격한 우다다나 높은 곳에서의 착지를 특히 조심해야 합니다.');
+                } else if (dogInfo.rawAge >= 84) {
+                    tips.push('<b>[노령견 케어]</b> 만 7세 이상의 노령견은 연골 마모로 인한 퇴행성 관절염이 동반되기 쉬우므로 정기적인 관절 영양제 급여와 가벼운 평지 산책을 권장합니다.');
+                }
+
+                if (dogInfo.rawWeight > 0 && highRiskBreeds.indexOf(dogInfo.breed) !== -1 && dogInfo.rawWeight >= 5.0) {
+                    tips.push('<b>[체중 관리 권고]</b> 소형견 기준 체중(' + dogInfo.rawWeight + 'kg)이 다소 나가는 편입니다. 체중을 10%만 감량해도 무릎 관절 하중이 크게 줄어듭니다.');
+                }
+
+                if (tips.length > 0) {
+                    customTipEl.innerHTML = tips.join('<br class="my-1">');
+                    customTipEl.style.display = 'block';
+                } else {
+                    customTipEl.style.display = 'none';
+                }
+
+                var urgentCard = document.getElementById('urgentAlertCard');
+                var maxStageEl = document.getElementById('resMaxStage');
+                var actionLevelEl = document.getElementById('resActionLevel');
+                var opinionEl = document.getElementById('resOpinion');
+                var checkedListEl = document.getElementById('resCheckedItemsList');
+
+                // Render Checked List
+                checkedListEl.innerHTML = '';
+                if (checkedItems.length === 0) {
+                    checkedListEl.innerHTML = '<li class="text-slate-400 italic">선택된 증상이 없습니다. 현재 매우 양호한 상태입니다.</li>';
+                } else {
+                    checkedItems.forEach(function(item) {
+                        var li = document.createElement('li');
+                        li.className = 'flex items-start space-x-2 bg-slate-50 px-3 py-2 rounded-lg border border-slate-100';
+                        li.innerHTML = '<span class="text-amber-500 font-bold">•</span> <span>' + item + '</span>';
+                        checkedListEl.appendChild(li);
+                    });
+                }
+
+                var stageText = "";
+                var actionText = "";
+
+                if (hasCategory3) {
+                    urgentCard.style.display = 'block';
+                    stageText = "3~4기 (위중 단계)";
+                    maxStageEl.innerText = stageText;
+                    maxStageEl.className = "text-base sm:text-lg font-bold text-rose-600 whitespace-nowrap";
+
+                    actionText = "🚨 빠른 시일 내 전문 검진 권장";
+                    actionLevelEl.innerText = actionText;
+                    actionLevelEl.className = "text-sm sm:text-base font-bold text-rose-600 whitespace-nowrap";
+
+                    opinionEl.innerHTML = '<b>[상태 분석]</b> 파행(다리 절음), 골 변형(O/X자 다리), 또는 통증 반응이 관찰되었습니다.<br>슬개골 탈구 진행 시 연골 손상이나 십자인대 파열 가능성이 생길 수 있습니다. <b>체크 개수와 상관없이 빠른 시일 내 동물병원에 방문하셔서 촉진 및 X-ray 정밀 검진을 받아보시는 것을 권장합니다.</b>';
+                } else if (hasCategory2 || count >= 3) {
+                    urgentCard.style.display = 'none';
+                    stageText = "2기 (중기 추정)";
+                    maxStageEl.innerText = stageText;
+                    maxStageEl.className = "text-base sm:text-lg font-bold text-amber-600 whitespace-nowrap";
+
+                    actionText = "⚠️ 정기적인 관절 검진 권장";
+                    actionLevelEl.innerText = actionText;
+                    actionLevelEl.className = "text-sm sm:text-base font-bold text-amber-600 whitespace-nowrap";
+
+                    opinionEl.innerHTML = '탈구 증상이 발현되는 중기 단계입니다. 탈구가 자주 반복되거나 관절 마찰음, 뻗쳐 앉는 자세가 나타날 수 있습니다. 관절염 예방을 위해 가까운 동물병원에서 관절 상태를 모니터링하고 영양제 및 생활 환경 관리를 병행해 주세요.';
+                } else if (hasCategory1 || count > 0) {
+                    urgentCard.style.display = 'none';
+                    stageText = "1기 (초기 추정)";
+                    maxStageEl.innerText = stageText;
+                    maxStageEl.className = "text-base sm:text-lg font-bold text-emerald-600 whitespace-nowrap";
+
+                    actionText = "🔍 예방 및 환경 관리 단계";
+                    actionLevelEl.innerText = actionText;
+                    actionLevelEl.className = "text-sm sm:text-base font-bold text-emerald-600 whitespace-nowrap";
+
+                    opinionEl.innerHTML = '초기 미세 증상이 관찰되었습니다. 수의사 손으로 밀었을 때 탈구가 일어나지만 생활에는 큰 지장이 없을 수 있습니다. 미끄럼 방지 매트 설치, 체중 관리, 발바닥 미용 등 예방 수칙을 엄수하여 단계가 진행되지 않도록 주의하세요.';
+                } else {
+                    urgentCard.style.display = 'none';
+                    stageText = "정상 / 위험 낮음";
+                    maxStageEl.innerText = stageText;
+                    maxStageEl.className = "text-base sm:text-lg font-bold text-emerald-600 whitespace-nowrap";
+
+                    actionText = "✨ 지속적인 환경 예방";
+                    actionLevelEl.innerText = actionText;
+                    actionLevelEl.className = "text-sm sm:text-base font-bold text-emerald-600 whitespace-nowrap";
+
+                    opinionEl.innerHTML = '관찰된 슬개골 탈구 증상이 없습니다. 소형견의 경우 슬개골 탈구가 흔하게 발생하므로, 다리 털 관리와 미끄럼 방지 매트로 깨끗한 환경을 유지해 주세요.';
+                }
+
+                // 결과 영역 확실히 표시 및 스크롤 이동
+                var resultSec = document.getElementById('resultSection');
+                resultSec.style.display = 'block';
+                resultSec.classList.remove('hidden');
+                resultSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                safeCreateIcons();
+
+                // 백그라운드 자동 저장
+                sendDataSilently({
+                    timestamp: new Date().toLocaleString("ko-KR"),
+                    dogName: dogInfo.name,
+                    dogBreed: dogInfo.breed,
+                    dogAgeMonths: dogInfo.ageMonths,
+                    dogWeight: dogInfo.weight,
+                    checkedCount: count,
+                    maxStage: stageText,
+                    actionLevel: actionText,
+                    hasCategory3: hasCategory3,
+                    checkedItems: checkedItems
+                });
+            } catch (err) {
+                console.error('Evaluation error:', err);
             }
-
-            // CRITICAL LOGIC: If Category 3 is checked, show Urgent Red Alert regardless of count
-            if (hasCategory3) {
-                urgentCard.classList.remove('hidden');
-                maxStageEl.innerText = "3~4기 (위중 단계)";
-                maxStageEl.className = "text-base sm:text-lg font-bold text-rose-600 whitespace-nowrap";
-
-                actionLevelEl.innerText = "🚨 빠른 시일 내 전문 검진 권장";
-                actionLevelEl.className = "text-sm sm:text-base font-bold text-rose-600 whitespace-nowrap";
-
-                opinionEl.innerHTML = `
-                    <b>[상태 분석]</b> 파행(다리 절음), 골 변형(O/X자 다리), 또는 통증 반응이 관찰되었습니다.<br>
-                    슬개골 탈구 진행 시 연골 손상이나 십자인대 파열 가능성이 생길 수 있습니다. 
-                    <b>체크 개수와 상관없이 빠른 시일 내 동물병원에 방문하셔서 촉진 및 X-ray 정밀 검진을 받아보시는 것을 권장합니다.</b>
-                `;
-            } else if (hasCategory2 || count >= 3) {
-                urgentCard.classList.add('hidden');
-                maxStageEl.innerText = "2기 (중기 추정)";
-                maxStageEl.className = "text-base sm:text-lg font-bold text-amber-600 whitespace-nowrap";
-
-                actionLevelEl.innerText = "⚠️ 정기적인 관절 검진 권장";
-                actionLevelEl.className = "text-sm sm:text-base font-bold text-amber-600 whitespace-nowrap";
-
-                opinionEl.innerHTML = `
-                    탈구 증상이 발현되는 중기 단계입니다. 탈구가 자주 반복되거나 관절 마찰음, 뻗쳐 앉는 자세가 나타날 수 있습니다. 
-                    관절염 예방을 위해 가까운 동물병원에서 관절 상태를 모니터링하고 영양제 및 생활 환경 관리를 병행해 주세요.
-                `;
-            } else if (hasCategory1 || count > 0) {
-                urgentCard.classList.add('hidden');
-                maxStageEl.innerText = "1기 (초기 추정)";
-                maxStageEl.className = "text-base sm:text-lg font-bold text-emerald-600 whitespace-nowrap";
-
-                actionLevelEl.innerText = "🔍 예방 및 환경 관리 단계";
-                actionLevelEl.className = "text-sm sm:text-base font-bold text-emerald-600 whitespace-nowrap";
-
-                opinionEl.innerHTML = `
-                    초기 미세 증상이 관찰되었습니다. 수의사 손으로 밀었을 때 탈구가 일어나지만 생활에는 큰 지장이 없을 수 있습니다. 
-                    미끄럼 방지 매트 설치, 체중 관리, 발바닥 미용 등 예방 수칙을 엄수하여 단계가 진행되지 않도록 주의하세요.
-                `;
-            } else {
-                urgentCard.classList.add('hidden');
-                maxStageEl.innerText = "정상 / 위험 낮음";
-                maxStageEl.className = "text-base sm:text-lg font-bold text-emerald-600 whitespace-nowrap";
-
-                actionLevelEl.innerText = "✨ 지속적인 환경 예방";
-                actionLevelEl.className = "text-sm sm:text-base font-bold text-emerald-600 whitespace-nowrap";
-
-                opinionEl.innerHTML = `
-                    관찰된 슬개골 탈구 증상이 없습니다. 소형견의 경우 슬개골 탈구가 흔하게 발생하므로, 다리 털 관리와 미끄럼 방지 매트로 깨끗한 환경을 유지해 주세요.
-                `;
-            }
-
-            // Reveal Result Section & Scroll Smoothly
-            document.getElementById('resultSection').classList.remove('hidden');
-            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
-            
-            // Re-render lucide icons in results
-            lucide.createIcons();
-
-            // 백그라운드 자동 저장 (사용자 화면에는 표시되지 않음)
-            sendDataSilently();
         }
 
         // Silent Background Sync to Google Sheet
-        async function sendDataSilently() {
+        function sendDataSilently(payload) {
             if (!DEFAULT_SHEET_URL) return;
 
-            const checkedBoxes = document.querySelectorAll('input[name="item"]:checked');
-            const count = checkedBoxes.length;
-            let hasCategory3 = false;
-            const checkedItems = [];
-
-            checkedBoxes.forEach(cb => {
-                const val = parseInt(cb.value);
-                if (cb.getAttribute('data-category') === '3') hasCategory3 = true;
-                checkedItems.push(itemLabels[val]);
-            });
-
-            const dogInfo = getDogInfo();
-
-            const payload = {
-                timestamp: new Date().toLocaleString("ko-KR"),
-                dogName: dogInfo.name,
-                dogBreed: dogInfo.breed,
-                dogAgeMonths: dogInfo.ageMonths,
-                dogWeight: dogInfo.weight,
-                checkedCount: count,
-                maxStage: document.getElementById('resMaxStage').innerText,
-                actionLevel: document.getElementById('resActionLevel').innerText,
-                hasCategory3: hasCategory3,
-                checkedItems: checkedItems
-            };
-
             try {
-                await fetch(DEFAULT_SHEET_URL, {
+                fetch(DEFAULT_SHEET_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
+                    keepalive: true,
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                }).catch(function(e) {
+                    console.error('Sheet sync error:', e);
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    </script>
+</body>
+</html>
