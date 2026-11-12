@@ -1,293 +1,693 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>멍냥닥터 - 강아지 슬개골 탈구 자가진단</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <style>
-    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-    body {
-      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>멍냥닥터 - 강아지 슬개골 탈구 자가 체크리스트</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fdf8f6',
+                            100: '#f2e8e5',
+                            500: '#e07a5f',
+                            600: '#d16040',
+                            700: '#b04a2e',
+                        },
+                        amber: {
+                            50: '#fffbeb',
+                            500: '#f59e0b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Pretendard', sans-serif; word-break: keep-all; }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; color: black; }
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen pb-16">
+<body class="bg-amber-50/40 text-slate-800 min-h-screen flex flex-col antialiased">
 
-  <!-- Header -->
-  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
-    <div class="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
-          <i data-lucide="stethoscope" class="w-5 h-5"></i>
+    <!-- Header Navigation (멍냥닥터 브랜드 영역) -->
+    <header class="bg-white border-b border-amber-100 sticky top-0 z-30 no-print">
+        <div class="max-w-4xl mx-auto px-4 py-3.5 flex items-center justify-between gap-2">
+            <div class="flex items-center space-x-2.5 min-w-0">
+                <div class="bg-amber-500 text-white p-2 sm:p-2.5 rounded-xl shadow-sm flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="stethoscope" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                </div>
+                <div class="min-w-0">
+                    <div class="flex items-center space-x-1.5">
+                        <span class="font-extrabold text-amber-600 text-sm sm:text-base tracking-tight whitespace-nowrap">멍냥닥터</span>
+                        <span class="text-xs text-slate-300">|</span>
+                        <h1 class="font-bold text-sm sm:text-base leading-tight text-slate-800 truncate">슬개골 건강 체크리스트</h1>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5 truncate">우리 아이 관절 건강을 지키는 단계별 자가 진단</p>
+                </div>
+            </div>
+
+            <span class="inline-flex items-center space-x-1 bg-amber-50 text-amber-700 border border-amber-200/80 px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-bold whitespace-nowrap flex-shrink-0">
+                <i data-lucide="heart" class="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-amber-500 text-amber-500"></i>
+                <span>Doctor Pet</span>
+            </span>
         </div>
-        <div>
-          <h1 class="font-bold text-lg text-slate-900 leading-tight">멍냥닥터 슬개골 체크</h1>
-          <p class="text-xs text-slate-500">우리 아이 다리 건강 &amp; 슬개골 탈구 자가진단</p>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto px-4 py-6 flex-1 w-full">
+
+        <!-- Banner / Disclaimer -->
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-amber-100 shadow-sm mb-6 flex items-start space-x-3.5">
+            <div class="p-2.5 sm:p-3 bg-amber-100 text-amber-700 rounded-xl flex-shrink-0">
+                <i data-lucide="activity" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+            </div>
+            <div class="flex-1 text-xs sm:text-sm">
+                <h2 class="font-bold text-sm sm:text-base text-slate-800 mb-1">체크 전 꼭 확인하세요!</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    본 체크리스트는 가정에서 반려견의 슬개골 이상 유무와 진행 위험도를 파악하기 위한 <b>보조 진단 도구</b>입니다. 
+                    3단계(위중) 증상이 포착되거나 통증을 호소할 경우 <b>체크 수와 관계없이 즉시 수의사 정밀 진단</b>을 받아야 합니다.
+                </p>
+            </div>
         </div>
-      </div>
-      <button onclick="openModal('settingsModal')" class="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition" title="구글 시트 연동 설정">
-        <i data-lucide="settings" class="w-5 h-5"></i>
-      </button>
-    </div>
-  </header>
 
-  <main class="max-w-3xl mx-auto px-4 pt-6 space-y-6">
-    <!-- 기본 정보 입력 카드 -->
-    <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-4">
-      <div class="flex items-center gap-2 text-emerald-700 font-semibold">
-        <i data-lucide="dog" class="w-5 h-5"></i>
-        <h2>반려견 기본 정보</h2>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">이름</label>
-          <input type="text" id="petName" placeholder="예: 초코" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        <!-- Dog Info Input Field -->
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-amber-100 shadow-sm mb-6 no-print">
+            <div class="flex items-center space-x-2 mb-4">
+                <i data-lucide="heart-handshake" class="w-5 h-5 text-amber-500 flex-shrink-0"></i>
+                <h2 class="font-bold text-sm text-slate-800">반려견 기본 정보 (맞춤형 케어 가이드 분석용)</h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div>
+                    <label for="dogName" class="block text-xs font-semibold text-slate-600 mb-1">강아지 이름</label>
+                    <input type="text" id="dogName" placeholder="예: 멍멍이" 
+                        class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                </div>
+                <div>
+                    <label for="dogBreed" class="block text-xs font-semibold text-slate-600 mb-1">견종 (케어 가이드 반영)</label>
+                    <select id="dogBreed" onchange="toggleCustomBreed()"
+                        class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                        <option value="">견종 선택 (선택사항)</option>
+                        <option value="포메라니안">포메라니안 (고위험군)</option>
+                        <option value="말티즈">말티즈 (고위험군)</option>
+                        <option value="푸들">푸들 (고위험군)</option>
+                        <option value="치와와">치와와 (고위험군)</option>
+                        <option value="요크셔테리어">요크셔테리어 (고위험군)</option>
+                        <option value="비숑 프리제">비숑 프리제</option>
+                        <option value="시츄">시츄</option>
+                        <option value="웰시코기/닥스훈트">웰시코기 / 닥스훈트</option>
+                        <option value="믹스견">믹스견</option>
+                        <option value="기타">기타 (직접 입력)</option>
+                    </select>
+                    <input type="text" id="customBreed" placeholder="견종 직접 입력" 
+                        class="hidden w-full mt-1.5 px-3 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                </div>
+                <div>
+                    <label for="dogAgeMonths" class="block text-xs font-semibold text-slate-600 mb-1">나이 (개월 수)</label>
+                    <div class="relative">
+                        <input type="number" id="dogAgeMonths" min="1" max="300" placeholder="예: 36" 
+                            class="w-full px-3 py-2 pr-12 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                        <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-medium whitespace-nowrap">개월</span>
+                    </div>
+                </div>
+                <div>
+                    <label for="dogWeight" class="block text-xs font-semibold text-slate-600 mb-1">몸무게 (kg)</label>
+                    <div class="relative">
+                        <input type="number" id="dogWeight" step="0.1" min="0.5" max="100" placeholder="예: 3.5" 
+                            class="w-full px-3 py-2 pr-10 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50">
+                        <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-medium whitespace-nowrap">kg</span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">나이 (살)</label>
-          <input type="number" id="petAge" placeholder="예: 3" min="0" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+
+        <!-- Progress bar -->
+        <div class="bg-white rounded-xl p-4 border border-amber-100 shadow-sm mb-6 no-print">
+            <div class="flex justify-between items-center gap-2 mb-2">
+                <span class="text-xs font-semibold text-slate-600 whitespace-nowrap">진행률 (<span id="checkedCount" class="text-amber-600">0</span>/10 선택됨)</span>
+                <span id="stageBadge" class="text-xs px-2.5 py-1 rounded-full font-bold bg-slate-100 text-slate-600 whitespace-nowrap">대기 중</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                <div id="progressBar" class="bg-amber-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
         </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">체중 (kg)</label>
-          <input type="number" id="petWeight" step="0.1" placeholder="예: 4.5" min="0" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+
+        <!-- Checklist Categories -->
+        <form id="checklistForm" class="space-y-6">
+
+            <!-- Category 1: 초기 (1기 추정) -->
+            <section class="bg-white rounded-2xl border border-emerald-100 shadow-sm overflow-hidden">
+                <div class="bg-emerald-50/70 border-b border-emerald-100 px-4 sm:px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500 flex-shrink-0"></span>
+                        <h3 class="font-bold text-sm sm:text-base text-slate-800">1. 초기 (1기 추정) — 미세 증상 및 예방 관리</h3>
+                    </div>
+                    <span class="text-xs text-emerald-700 font-medium bg-emerald-100/70 px-2 py-0.5 rounded whitespace-nowrap">주의 깊은 관찰 필요</span>
+                </div>
+                <div class="p-3 sm:p-4 space-y-2.5">
+                    <label class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 cursor-pointer transition">
+                        <input type="checkbox" name="item" value="1" data-category="1" class="w-5 h-5 mt-0.5 text-amber-500 rounded focus:ring-amber-400 accent-amber-500 flex-shrink-0">
+                        <div>
+                            <div class="font-medium text-slate-800 text-sm">1. 걷거나 뛰다가 뒷다리를 한 번씩 틱틱 튕기듯 든다.</div>
+                            <div class="text-xs text-slate-500 mt-0.5">관절이 순간적으로 빠졌다가 스스로 들어가는 초기 신호입니다.</div>
+                        </div>
+                    </label>
+
+                    <label class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 cursor-pointer transition">
+                        <input type="checkbox" name="item" value="2" data-category="1" class="w-5 h-5 mt-0.5 text-amber-500 rounded focus:ring-amber-400 accent-amber-500 flex-shrink-0">
+                        <div>
+                            <div class="font-medium text-slate-800 text-sm">2. 엉덩이를 좌우로 유난히 흔들면서 걷는다 (오리걸음).</div>
+                            <div class="text-xs text-slate-500 mt-0.5">관절 가동 범위가 줄어들어 보행 균형이 흐트러지기 시작하는 시점에 나타납니다.</div>
+                        </div>
+                    </label>
+
+                    <label class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 cursor-pointer transition">
+                        <input type="checkbox" name="item" value="3" data-category="1" class="w-5 h-5 mt-0.5 text-amber-500 rounded focus:ring-amber-400 accent-amber-500 flex-shrink-0">
+                        <div>
+                            <div class="font-medium text-slate-800 text-sm">3. 소파나 계단을 오르내릴 때 이전보다 주저하거나 망설인다.</div>
+                            <div class="text-xs text-slate-500 mt-0.5">높낮이가 있는 곳에 착지할 때 관절 통증이나 불안감을 느낄 수 있습니다.</div>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Category 2: 중기 (2기 추정) -->
+            <section class="bg-white rounded-2xl border border-amber-100 shadow-sm overflow-hidden">
+                <div class="bg-amber-50/70 border-b border-amber-100 px-4 sm:px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-amber-500 flex-shrink-0"></span>
+                        <h3 class="font-bold text-sm sm:text-base text-slate-800">2. 중기 (2기 추정) — 명확한 증상 발현 단계</h3>
+                    </div>
+                    <span class="text-xs text-amber-700 font-medium bg-amber-100/70 px-2 py-0.5 rounded whitespace-nowrap">동물병원 검진 권장</span>
+                </div>
+                <div class="p-3 sm:p-4 space-y-2.5">
+                    <label class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 cursor-pointer transition">
+                        <input type="checkbox" name="item" value="4" data-category="2" class="w-5 h-5 mt-0.5 text-amber-500 rounded focus:ring-amber-400 accent-amber-500 flex-shrink-0">
+                        <div>
+                            <div class="font-medium text-slate-800 text-sm">4. 뒷다리를 절다가 몇 걸음 지나면 다시 정상적으로 걸어 다닌다.</div>
+                            <div class="text-xs text-slate-500 mt-0.5">탈구가 빈번히 일어나며, 굽힘 운동으로 다시 빠진 슬개골을 맞추는 모습입니다.</div>
+                        </div>
+                    </label>
+
+                    <label class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 cursor-pointer transition">
+                        <input type="checkbox" name="item" value="5" data-category="2" class="w-5 h-5 mt-0.5 text-amber-500 rounded focus:ring-amber-400 accent-amber-500 flex-shrink-0">
+                        <div>
+                            <div class="font-medium text-slate-800 text-sm">5. 앉아 있을 때 뒷다리를 옆으로 어정쩡하게 뻗고 앉는다.</div>
+                            <div class="text-xs text-slate-500 mt-0.5">무릎을 깊게 구부리기 불편하여 뻗쳐 앉는 보상 자세를 취합니다.</div>
+                        </div>
+                    </label>
+
+                    <label class="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 cursor-pointer transition">
+                        <input type="checkbox" name="item" value="6" data-category="2" class="w-5 h-5 mt-0.5 text-amber-500 rounded focus:ring-amber-400 accent-amber-500 flex-shrink-0">
+                        <div>
+                            <div class="font-medium text-slate-800 text-sm">6. 무릎(뒷다리 관절)에서 '뚝' 소리나 마찰음이 느껴진다.</div>
+                            <div class="text-xs text-slate-500 mt-0.5">슬개골이 도르래 고랑을 벗어나 연골 및 마찰을 일으키는 소리입니다.</div>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Category 3: 위중 (3~4기 추정) -->
+            <section class="bg-white rounded-2xl border border-rose-100 shadow-sm overflow-hidden">
+                <div class="bg-rose-50/70 border-b border-rose-100 px-4 sm:px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-rose-500 animate-pulse flex-shrink-0"></span>
+                        <h3 class="font-bold text-sm sm:text-base text-rose-900">3. 위중 (3~4기 추정) — 즉시 전문의 정밀 검진 필요</h3>
+                    </div>
+                    <span class="text-xs text-rose-700 font-bold bg-rose-100 px-2 py-0.5 rounded whitespace-nowrap">🚨 정밀 검진 필수</span>
+                </div>
+                <div class="p-3 sm:p-4 space-y-2.5 bg-rose-50/20">
+                    <label class="flex items-start space-x-3 p-3 rounded-xl hover:bg-rose-50/50 border border-transparent hover:border-rose-100 cursor-pointer transition">
+                        <input type="checkbox" name="item" value="7" data-category="3" class="w-5 h-5 mt-0.5 text-rose-600 rounded focus:ring-rose-400 accent-rose-600 flex-shrink-0">
+                        <div>
+                            <div class="font-semibold text-rose-950 text-sm">7. 한쪽 뒷다리를 아예 땅에 닿지 않고 든 채 세 다리로 걷는다.</div>
+                            <div class="text-xs text-rose-600 mt-0.5">체중 지지가 불가능할 정도의 통증 및 탈구 상태입니다.</div>
+                        </div>
+                    </label>
+
+                    <label class="flex items-start space-x-3 p-3 rounded-xl hover:bg-rose-50/50 border border-transparent hover:border-rose-100 cursor-pointer transition">
+                        <input type="checkbox" name="item" value="8" data-category="3" class="w-5 h-5 mt-0.5 text-rose-600 rounded focus:ring-rose-400 accent-rose-600 flex-shrink-0">
+                        <div>
+                            <div class="font-semibold text-rose-950 text-sm">8. 뒷다리가 O자형(안쪽) 또는 X자형(밖으로)으로 눈에 띄게 휘었다.</div>
+                            <div class="text-xs text-rose-600 mt-0.5">골 변형 및 관절 변형이 본격 진행되고 있는 신호입니다.</div>
+                        </div>
+                    </label>
+
+                    <label class="flex items-start space-x-3 p-3 rounded-xl hover:bg-rose-50/50 border border-transparent hover:border-rose-100 cursor-pointer transition">
+                        <input type="checkbox" name="item" value="9" data-category="3" class="w-5 h-5 mt-0.5 text-rose-600 rounded focus:ring-rose-400 accent-rose-600 flex-shrink-0">
+                        <div>
+                            <div class="font-semibold text-rose-950 text-sm">9. 다리를 만지거나 굽힐 때 낑낑거리며 비명을 지르거나 통증을 호소한다.</div>
+                            <div class="text-xs text-rose-600 mt-0.5">만성 관절염 또는 십자인대 손상이 병행되어 강한 통증이 수반됩니다.</div>
+                        </div>
+                    </label>
+
+                    <label class="flex items-start space-x-3 p-3 rounded-xl hover:bg-rose-50/50 border border-transparent hover:border-rose-100 cursor-pointer transition">
+                        <input type="checkbox" name="item" value="10" data-category="3" class="w-5 h-5 mt-0.5 text-rose-600 rounded focus:ring-rose-400 accent-rose-600 flex-shrink-0">
+                        <div>
+                            <div class="font-semibold text-rose-950 text-sm">10. 뒷다리를 구부정한 채 엉거주춤 걷거나 보행 자체가 심하게 불편해 보인다.</div>
+                            <div class="text-xs text-rose-600 mt-0.5">슬개골이 완전히 이탈하여 손으로 밀어도 정복되지 않는 4기 진행 가능성이 높습니다.</div>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <div class="flex justify-center pt-2 no-print">
+                <button type="button" onclick="evaluateChecklist()" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/20 flex items-center justify-center space-x-2 transition transform active:scale-95">
+                    <i data-lucide="stethoscope" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="whitespace-nowrap">진단 결과 및 가이드 확인하기</span>
+                </button>
+            </div>
+        </form>
+
+        <!-- Result View Section (Hidden by default) -->
+        <section id="resultSection" class="hidden mt-8 space-y-6">
+
+            <!-- Urgent Red Alert Modal/Card for Category 3 -->
+            <div id="urgentAlertCard" class="hidden bg-rose-600 text-white rounded-2xl p-5 sm:p-6 shadow-xl border-2 border-rose-700">
+                <div class="flex items-start space-x-3.5 sm:space-x-4">
+                    <div class="p-2.5 sm:p-3 bg-white/20 rounded-xl flex-shrink-0">
+                        <i data-lucide="alert-triangle" class="w-7 h-7 sm:w-8 sm:h-8 text-white"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="bg-white text-rose-600 font-extrabold text-xs px-2.5 py-0.5 rounded-full uppercase whitespace-nowrap">동물병원 검진 권장</span>
+                            <span class="text-rose-100 text-xs whitespace-nowrap">개수 상관없이 안내</span>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-extrabold mt-1.5">위중 단계 증상이 관찰되었습니다.</h3>
+                        <p class="mt-2 text-xs sm:text-sm text-rose-100 leading-relaxed font-medium">
+                            체크된 개수와 무관하게 <b>[위중 단계]</b> 항목이 선택되었습니다. 
+                            슬개골 이탈 지속, 관절염 또는 십자인대 파열 가능성이 있으니 <b>빠른 시일 내 동물병원에 방문하셔서 X-ray 및 정밀 검진</b>을 받아보시기를 권장합니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Evaluation Report -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+                <div class="border-b border-slate-100 pb-4 mb-5 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs bg-amber-100 text-amber-700 font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap">멍냥닥터 헬스케어</span>
+                            <span id="resDogName" class="text-xs text-amber-600 font-bold tracking-wider">반려견</span>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-bold text-slate-800 mt-1.5">슬개골 자가 진단 평가서</h3>
+                    </div>
+                    <div class="text-xs text-slate-400 whitespace-nowrap">
+                        검사일: <span id="currentDate"></span>
+                    </div>
+                </div>
+
+                <!-- 요약 카드 3종 (모바일 줄바꿈 깨짐 완벽 방지) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex sm:block items-center justify-between">
+                        <div class="text-xs text-slate-500 sm:mb-1 whitespace-nowrap">총 체크 항목 수</div>
+                        <div class="text-xl sm:text-2xl font-bold text-slate-800 whitespace-nowrap"><span id="resCheckedCount">0</span> / 10개</div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex sm:block items-center justify-between">
+                        <div class="text-xs text-slate-500 sm:mb-1 whitespace-nowrap">포착된 최고 위험 단계</div>
+                        <div id="resMaxStage" class="text-base sm:text-lg font-bold text-slate-800 whitespace-nowrap">-</div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex sm:block items-center justify-between">
+                        <div class="text-xs text-slate-500 sm:mb-1 whitespace-nowrap">권장 대응 수준</div>
+                        <div id="resActionLevel" class="text-sm sm:text-base font-bold text-amber-600 whitespace-nowrap">-</div>
+                    </div>
+                </div>
+
+                <!-- Comprehensive Opinion -->
+                <div class="bg-amber-50/60 rounded-xl p-4 border border-amber-100 mb-6">
+                    <h4 class="font-bold text-slate-800 text-sm mb-2 flex items-center space-x-1.5">
+                        <i data-lucide="clipboard-check" class="w-4 h-4 text-amber-600 flex-shrink-0"></i>
+                        <span>종합 상태 분석 및 소견</span>
+                    </h4>
+                    <p id="resOpinion" class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        체크를 완료하시면 세부 소견이 이곳에 표시됩니다.
+                    </p>
+                </div>
+
+                <!-- Checked Items List -->
+                <div class="mb-6">
+                    <h4 class="font-bold text-slate-800 text-sm mb-3">관찰된 증상 목록</h4>
+                    <ul id="resCheckedItemsList" class="space-y-2 text-xs sm:text-sm text-slate-700">
+                        <!-- Items injected by JS -->
+                    </ul>
+                </div>
+
+                <!-- Homecare Advice -->
+                <div class="border-t border-slate-100 pt-5">
+                    <h4 class="font-bold text-slate-800 text-sm mb-3 flex items-center space-x-1.5">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
+                        <span>가정 내 슬개골 관절 보호 수칙</span>
+                    </h4>
+                    <div id="customCareTip" class="hidden mb-3 p-3 bg-emerald-50/80 border border-emerald-200 rounded-xl text-xs text-emerald-900 leading-relaxed">
+                        <!-- Breed / Age / Weight specific tip injected by JS -->
+                    </div>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600">
+                        <li class="flex items-center space-x-2 bg-slate-50 p-2.5 rounded-lg">
+                            <span class="text-emerald-500 font-bold">✓</span>
+                            <span>슬라이딩 방지 매트 거실 전체 설치</span>
+                        </li>
+                        <li class="flex items-center space-x-2 bg-slate-50 p-2.5 rounded-lg">
+                            <span class="text-emerald-500 font-bold">✓</span>
+                            <span>발바닥 털 수시 미용 & 발톱 짧게 유지</span>
+                        </li>
+                        <li class="flex items-center space-x-2 bg-slate-50 p-2.5 rounded-lg">
+                            <span class="text-emerald-500 font-bold">✓</span>
+                            <span>침대/소파 하단 전용 계단(스텝) 배치</span>
+                        </li>
+                        <li class="flex items-center space-x-2 bg-slate-50 p-2.5 rounded-lg">
+                            <span class="text-emerald-500 font-bold">✓</span>
+                            <span>두 발로 일어서기 & 높은 곳 점프 제지</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 멍냥닥터 브랜드 안내 카드 -->
+                <div class="mt-6 bg-amber-50/70 border border-amber-200/70 rounded-xl p-4 flex items-center space-x-3">
+                    <div class="bg-amber-500 text-white p-2 rounded-lg flex-shrink-0">
+                        <i data-lucide="stethoscope" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs font-extrabold text-amber-700">멍냥닥터 (Doctor Pet)</div>
+                        <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">우리 아이의 건강한 발걸음을 위해 정기적인 관절 체크와 맞춤 케어를 실천하세요.</p>
+                    </div>
+                </div>
+
+                <!-- Actions / Buttons (프린트/PDF 저장만 노출) -->
+                <div class="mt-6 pt-4 border-t border-slate-100 flex justify-end items-center no-print">
+                    <button onclick="window.print()" class="w-full sm:w-auto justify-center px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-sm font-semibold flex items-center space-x-2 shadow-sm transition">
+                        <i data-lucide="printer" class="w-4 h-4"></i>
+                        <span>평가서 프린트 / PDF 저장</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer (멍냥닥터 브랜드 영역) -->
+    <footer class="bg-white border-t border-amber-100 py-6 text-xs text-slate-500 no-print mt-auto">
+        <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center space-x-2.5">
+                <div class="bg-amber-500 text-white p-1.5 rounded-lg flex-shrink-0">
+                    <i data-lucide="stethoscope" class="w-4 h-4"></i>
+                </div>
+                <div>
+                    <span class="font-extrabold text-slate-800 text-sm">멍냥닥터 (Doctor Pet)</span>
+                    <span class="text-slate-400 ml-1.5">반려동물 헬스케어 연구소</span>
+                </div>
+            </div>
+            <div class="text-slate-400 text-center sm:text-right">
+                &copy; 2026 멍냥닥터 (Doctor Pet). All rights reserved.
+            </div>
         </div>
-      </div>
-    </section>
+    </footer>
 
-    <!-- 자가진단 체크리스트 -->
-    <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-4">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2 text-emerald-700 font-semibold">
-          <i data-lucide="check-square" class="w-5 h-5"></i>
-          <h2>행동 및 증상 체크리스트</h2>
-        </div>
-        <span class="text-xs text-slate-400">해당하는 항목을 모두 선택하세요</span>
-      </div>
+    <!-- Main Logic JavaScript -->
+    <script>
+        // Google Apps Script Web App URL (백그라운드 자동 저장용)
+        const DEFAULT_SHEET_URL = "https://script.google.com/macros/s/AKfycbyUy-HYcV7Q63jDsVZR9__EcCBwxPY3Fx2i2TQiK7j0PJC2xrka4oPE3nX8kHzDMWaD/exec"; 
 
-      <div id="checklistContainer" class="space-y-2.5"></div>
+        const itemLabels = {
+            1: "1. 걷거나 뛰다가 뒷다리를 틱틱 튕기듯 든다. (초기)",
+            2: "2. 엉덩이를 좌우로 유난히 흔들며 걷는다. (초기)",
+            3: "3. 소파/계단을 오르내릴 때 주저한다. (초기)",
+            4: "4. 뒷다리를 절다가 다시 정상 보행한다. (중기)",
+            5: "5. 앉을 때 뒷다리를 옆으로 어정쩡하게 뻗는다. (중기)",
+            6: "6. 무릎 관절에서 '뚝' 소리/마찰음이 난다. (중기)",
+            7: "7. 뒷다리를 아예 들고 세 다리로 걷는다. (위중🚨)",
+            8: "8. 뒷다리가 O자형 또는 X자형으로 휘었다. (위중🚨)",
+            9: "9. 다리를 만지거나 굽힐 때 비명을 지르거나 통증을 호소한다. (위중🚨)",
+            10: "10. 뒷다리가 구부정한 채 엉거주춤 보행한다. (위중🚨)"
+        };
 
-      <button onclick="evaluateCheck()" class="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3.5 rounded-xl shadow-sm transition flex items-center justify-center gap-2">
-        <i data-lucide="activity" class="w-5 h-5"></i>
-        <span>진단 결과 확인하기</span>
-      </button>
-    </section>
+        // App Initialization
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
 
-    <!-- 진단 결과 영역 -->
-    <section id="resultSection" class="hidden bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-        <div>
-          <span id="resultBadge" class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-1.5"></span>
-          <h3 id="resultTitle" class="text-xl font-bold text-slate-900"></h3>
-        </div>
-        <div class="text-right">
-          <span class="text-xs text-slate-400 block">체크 항목</span>
-          <span id="resultScore" class="text-2xl font-extrabold text-emerald-600">0 / 8</span>
-        </div>
-      </div>
+            // Form inputs change listener
+            document.querySelectorAll('input[name="item"]').forEach(checkbox => {
+                checkbox.addEventListener('change', updateProgress);
+            });
 
-      <p id="resultDesc" class="text-sm text-slate-600 leading-relaxed"></p>
-
-      <div class="bg-slate-50 rounded-xl p-4 space-y-2">
-        <h4 class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-          <i data-lucide="info" class="w-4 h-4 text-emerald-600"></i>
-          권장 관리 가이드
-        </h4>
-        <ul id="resultTips" class="text-xs text-slate-600 space-y-1.5 list-disc list-inside"></ul>
-      </div>
-
-      <div class="pt-2 flex flex-col sm:flex-row gap-2.5">
-        <button onclick="saveToGoogleSheet()" id="saveSheetBtn" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium py-3 rounded-xl transition flex items-center justify-center gap-2">
-          <i data-lucide="cloud-upload" class="w-4 h-4"></i>
-          <span>구글 시트에 기록 저장하기</span>
-        </button>
-        <button onclick="resetForm()" class="px-5 py-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 text-sm font-medium transition">
-          다시 검사하기
-        </button>
-      </div>
-      <p id="saveStatus" class="text-xs text-center hidden"></p>
-    </section>
-  </main>
-
-  <!-- 구글 시트 연동 설정 모달 -->
-  <div id="settingsModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
-      <div class="flex items-center justify-between">
-        <h3 class="font-bold text-lg text-slate-900 flex items-center gap-2">
-          <i data-lucide="table" class="w-5 h-5 text-emerald-600"></i>
-          구글 시트 연동 설정
-        </h3>
-        <button onclick="closeModal('settingsModal')" class="text-slate-400 hover:text-slate-600">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-      <p class="text-xs text-slate-500 leading-relaxed">
-        Google Apps Script 웹 앱 URL을 입력하면 진단 결과를 구글 스프레드시트에 자동으로 누적 저장할 수 있습니다.
-      </p>
-      <div>
-        <label class="block text-xs font-semibold text-slate-700 mb-1">Apps Script 웹 앱 URL</label>
-        <input type="url" id="sheetUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-      </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closeModal('settingsModal')" class="px-4 py-2 rounded-xl text-sm text-slate-600 hover:bg-slate-100">취소</button>
-        <button onclick="saveSettings()" class="px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-600 hover:bg-emerald-700 text-white">설정 저장</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const checklistItems = [
-      { id: 1, text: "산책 중 갑자기 한쪽 뒷다리를 들고 깽깽이걸음(3발 걷기)을 한다.", weight: 2 },
-      { id: 2, text: "앉을 때 다리를 한쪽으로 삐딱하게 빼고 앉는 습관이 있다.", weight: 1 },
-      { id: 3, text: "뒷다리를 뒤로 쭉 뻗으며 기지개를 켜는 행동이 잦아졌다.", weight: 1 },
-      { id: 4, text: "무릎 부위를 만지거나 굽힐 때 '뚝' 하는 소리나 걸리는 느낌이 난다.", weight: 2 },
-      { id: 5, text: "소파나 침대 위로 뛰어오르기를 주저하거나 점프력이 떨어졌다.", weight: 1 },
-      { id: 6, text: "뒷다리 근육이 이전보다 얇아지거나 좌우 다리 굵기 차이가 보인다.", weight: 2 },
-      { id: 7, text: "무릎 주변을 유독 자주 핥거나 만지려 하면 예민하게 반응한다.", weight: 1 },
-      { id: 8, text: "걸을 때 엉덩이를 심하게 흔들거나 뒷다리가 안쪽/바깥쪽으로 휘어 보인다.", weight: 2 }
-    ];
-
-    let latestEvaluation = null;
-
-    function init() {
-      const container = document.getElementById('checklistContainer');
-      container.innerHTML = checklistItems.map(item => `
-        <label class="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/30 cursor-pointer transition select-none">
-          <input type="checkbox" value="${item.id}" data-weight="${item.weight}" class="check-item mt-0.5 w-4 h-4 accent-emerald-600 rounded" />
-          <span class="text-sm text-slate-700 leading-snug">${item.text}</span>
-        </label>
-      `).join('');
-
-      const savedUrl = localStorage.getItem('googleSheetWebAppUrl');
-      if (savedUrl) {
-        document.getElementById('sheetUrlInput').value = savedUrl;
-      }
-      lucide.createIcons();
-    }
-
-    function evaluateCheck() {
-      const checked = Array.from(document.querySelectorAll('.check-item:checked'));
-      const count = checked.length;
-      const score = checked.reduce((sum, el) => sum + Number(el.dataset.weight), 0);
-      const petName = document.getElementById('petName').value.trim() || '우리 아이';
-
-      let level, badgeClass, title, desc, tips;
-
-      if (count === 0) {
-        level = '양호 (정상 범위)';
-        badgeClass = 'bg-emerald-100 text-emerald-700';
-        title = `${petName}, 현재 특이 증상이 보이지 않아요`;
-        desc = '슬개골 탈구 의심 증상이 체크되지 않았습니다. 다만 소형견은 선천적으로 슬개골이 약한 경우가 많으므로 꾸준한 예방 관리가 중요합니다.';
-        tips = [
-          '미끄러운 마룻바닥에는 논슬립 매트를 깔아 관절 부담을 줄여주세요.',
-          '적정 체중을 유지해 무릎 관절에 가해지는 하중을 관리해 주세요.',
-          '발바닥 털과 발톱을 주기적으로 정리해 미끄러짐을 방지하세요.'
-        ];
-      } else if (score <= 4) {
-        level = '주의 (1~2기 의심)';
-        badgeClass = 'bg-amber-100 text-amber-700';
-        title = `${petName}, 초기 슬개골 탈구 징후가 의심됩니다`;
-        desc = '간헐적인 탈구(1~2기) 단계에서 흔히 나타나는 행동들이 확인되었습니다. 통증이 심하지 않아 보호자가 놓치기 쉬운 시기이므로 환경 개선과 정기 검진이 필요합니다.';
-        tips = [
-          '두 발로 서기, 높은 곳에서 뛰어내리기, 과격한 우다다를 제한해 주세요.',
-          '실내 계단(펫스텝)을 설치하고 미끄럼 방지 매트를 보강하세요.',
-          '동물병원 내원 시 무릎 촉진 검사를 받아 정확한 기수를 확인해 보세요.'
-        ];
-      } else {
-        level = '위험 (2~3기 이상 의심)';
-        badgeClass = 'bg-rose-100 text-rose-700';
-        title = `${petName}, 빠른 시일 내 수의사 진찰이 필요합니다`;
-        desc = '슬개골이 자주 빠지거나 고정된 상태(2~3기 이상)일 가능성이 높습니다. 방치할 경우 십자인대 파열이나 관절염으로 진행될 수 있습니다.';
-        tips = [
-          '무리한 산책이나 격한 놀이는 즉시 중단하고 안정을 취하게 해주세요.',
-          '가까운 동물병원에 방문하여 정형외과 촉진 및 X-ray 검사를 권장합니다.',
-          '체중 감량 및 관절 영양제 급여 여부를 수의사와 상담하세요.'
-        ];
-      }
-
-      document.getElementById('resultBadge').className = `inline-block px-3 py-1 rounded-full text-xs font-bold mb-1.5 ${badgeClass}`;
-      document.getElementById('resultBadge').textContent = level;
-      document.getElementById('resultTitle').textContent = title;
-      document.getElementById('resultScore').textContent = `${count} / ${checklistItems.length}`;
-      document.getElementById('resultDesc').textContent = desc;
-      document.getElementById('resultTips').innerHTML = tips.map(t => `<li>${t}</li>`).join('');
-
-      const resultSec = document.getElementById('resultSection');
-      resultSec.classList.remove('hidden');
-      resultSec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-      latestEvaluation = {
-        date: new Date().toLocaleString('ko-KR'),
-        name: petName,
-        age: document.getElementById('petAge').value || '-',
-        weight: document.getElementById('petWeight').value || '-',
-        checkedCount: count,
-        score: score,
-        level: level
-      };
-    }
-
-    function openModal(id) {
-      const modal = document.getElementById(id);
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-
-    function closeModal(id) {
-      const modal = document.getElementById(id);
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-    }
-
-    function saveSettings() {
-      const url = document.getElementById('sheetUrlInput').value.trim();
-      localStorage.setItem('googleSheetWebAppUrl', url);
-      closeModal('settingsModal');
-      alert('구글 시트 연동 URL이 저장되었습니다.');
-    }
-
-    async function saveToGoogleSheet() {
-      const url = localStorage.getItem('googleSheetWebAppUrl');
-      const statusEl = document.getElementById('saveStatus');
-
-      if (!url) {
-        openModal('settingsModal');
-        return;
-      }
-      if (!latestEvaluation) return;
-
-      const btn = document.getElementById('saveSheetBtn');
-      btn.disabled = true;
-      btn.innerHTML = '<span>저장 중...</span>';
-
-      try {
-        await fetch(url, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(latestEvaluation)
+            // Date setup
+            const today = new Date();
+            document.getElementById('currentDate').innerText = today.toLocaleDateString('ko-KR', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
         });
-        statusEl.textContent = '구글 시트로 기록이 전송되었습니다.';
-        statusEl.className = 'text-xs text-center text-emerald-600 font-medium block';
-      } catch (err) {
-        statusEl.textContent = '전송 중 오류가 발생했습니다. URL을 확인해 주세요.';
-        statusEl.className = 'text-xs text-center text-rose-600 font-medium block';
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i data-lucide="cloud-upload" class="w-4 h-4"></i><span>구글 시트에 기록 저장하기</span>';
-        lucide.createIcons();
-      }
-    }
 
-    function resetForm() {
-      document.querySelectorAll('.check-item').forEach(cb => cb.checked = false);
-      document.getElementById('resultSection').classList.add('hidden');
-      document.getElementById('saveStatus').classList.add('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+        // Toggle Custom Breed Input
+        function toggleCustomBreed() {
+            const select = document.getElementById('dogBreed');
+            const customInput = document.getElementById('customBreed');
+            if (select.value === '기타') {
+                customInput.classList.remove('hidden');
+                customInput.focus();
+            } else {
+                customInput.classList.add('hidden');
+            }
+        }
 
-    init();
-  </script>
-</body>
-</html>
+        // Helper to collect formatted dog info
+        function getDogInfo() {
+            const name = document.getElementById('dogName').value.trim() || '우리 반려견';
+            const breedSelect = document.getElementById('dogBreed').value;
+            const breed = breedSelect === '기타' 
+                ? (document.getElementById('customBreed').value.trim() || '기타 견종') 
+                : breedSelect;
+            const ageMonths = document.getElementById('dogAgeMonths').value.trim();
+            const weight = document.getElementById('dogWeight').value.trim();
+
+            const details = [];
+            if (breed) details.push(breed);
+            if (ageMonths) {
+                const years = Math.floor(ageMonths / 12);
+                const months = ageMonths % 12;
+                const ageStr = years > 0 ? `${ageMonths}개월(약 ${years}살${months > 0 ? ' ' + months + '개월' : ''})` : `${ageMonths}개월`;
+                details.push(ageStr);
+            }
+            if (weight) details.push(`${weight}kg`);
+
+            return {
+                name,
+                breed: breed || '미입력',
+                ageMonths: ageMonths ? `${ageMonths}개월` : '미입력',
+                weight: weight ? `${weight}kg` : '미입력',
+                rawAge: parseInt(ageMonths) || 0,
+                rawWeight: parseFloat(weight) || 0,
+                displayTitle: details.length > 0 ? `${name} (${details.join(' / ')})` : name
+            };
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const checkedBoxes = document.querySelectorAll('input[name="item"]:checked');
+            const count = checkedBoxes.length;
+            const percentage = (count / 10) * 100;
+            
+            document.getElementById('checkedCount').innerText = count;
+            document.getElementById('progressBar').style.width = percentage + '%';
+
+            const badge = document.getElementById('stageBadge');
+            let hasCat3 = false;
+            let hasCat2 = false;
+
+            checkedBoxes.forEach(cb => {
+                const cat = cb.getAttribute('data-category');
+                if (cat === '3') hasCat3 = true;
+                if (cat === '2') hasCat2 = true;
+            });
+
+            if (hasCat3) {
+                badge.innerText = "위중 단계 감지 🚨";
+                badge.className = "text-xs px-2.5 py-1 rounded-full font-bold bg-rose-100 text-rose-700 animate-pulse whitespace-nowrap";
+            } else if (hasCat2) {
+                badge.innerText = "중기 진행 가능성 ⚠️";
+                badge.className = "text-xs px-2.5 py-1 rounded-full font-bold bg-amber-100 text-amber-700 whitespace-nowrap";
+            } else if (count > 0) {
+                badge.innerText = "초기 관리 단계 🔍";
+                badge.className = "text-xs px-2.5 py-1 rounded-full font-bold bg-emerald-100 text-emerald-700 whitespace-nowrap";
+            } else {
+                badge.innerText = "대기 중";
+                badge.className = "text-xs px-2.5 py-1 rounded-full font-bold bg-slate-100 text-slate-600 whitespace-nowrap";
+            }
+        }
+
+        // Main Diagnostic Evaluation Logic
+        function evaluateChecklist() {
+            const checkedBoxes = document.querySelectorAll('input[name="item"]:checked');
+            const count = checkedBoxes.length;
+
+            let hasCategory1 = false;
+            let hasCategory2 = false;
+            let hasCategory3 = false;
+            const checkedItems = [];
+
+            checkedBoxes.forEach(cb => {
+                const cat = cb.getAttribute('data-category');
+                const val = parseInt(cb.value);
+                if (cat === '1') hasCategory1 = true;
+                if (cat === '2') hasCategory2 = true;
+                if (cat === '3') hasCategory3 = true;
+                checkedItems.push(itemLabels[val]);
+            });
+
+            const dogInfo = getDogInfo();
+            document.getElementById('resDogName').innerText = dogInfo.displayTitle;
+            document.getElementById('resCheckedCount').innerText = count;
+
+            // Generate Personalized Care Tip based on Breed, Age, Weight
+            const customTipEl = document.getElementById('customCareTip');
+            let tips = [];
+            const highRiskBreeds = ['포메라니안', '말티즈', '푸들', '치와와', '요크셔테리어'];
+
+            if (highRiskBreeds.includes(dogInfo.breed)) {
+                tips.push(`<b>[${dogInfo.breed} 맞춤 케어]</b> 선천적으로 무릎 도르래 고랑이 얕은 고위험 견종입니다. 실내 미끄럼 방지와 뒷다리 근육(대퇴사두근) 유지가 필수적입니다.`);
+            } else if (dogInfo.breed === '웰시코기/닥스훈트') {
+                tips.push(`<b>[${dogInfo.breed} 맞춤 케어]</b> 허리가 길고 다리가 짧은 체형 특성상 슬개골과 함께 척추(디스크)에 하중이 쏠리기 쉬우므로 계단 오르내리기와 점프를 엄격히 제한해 주세요.`);
+            }
+
+            if (dogInfo.rawAge > 0 && dogInfo.rawAge < 12) {
+                tips.push(`<b>[성장기 주의]</b> 생후 ${dogInfo.rawAge}개월은 뼈와 인대가 성장하는 시기이므로 과격한 우다다나 높은 곳에서의 착지를 특히 조심해야 합니다.`);
+            } else if (dogInfo.rawAge >= 84) {
+                tips.push(`<b>[노령견 케어]</b> 만 7세 이상의 노령견은 연골 마모로 인한 퇴행성 관절염이 동반되기 쉬우므로 정기적인 관절 영양제 급여와 가벼운 평지 산책을 권장합니다.`);
+            }
+
+            if (dogInfo.rawWeight > 0 && highRiskBreeds.includes(dogInfo.breed) && dogInfo.rawWeight >= 5.0) {
+                tips.push(`<b>[체중 관리 권고]</b> 소형견 기준 체중(${dogInfo.rawWeight}kg)이 다소 나가는 편입니다. 체중을 10%만 감량해도 무릎 관절 하중이 크게 줄어듭니다.`);
+            }
+
+            if (tips.length > 0) {
+                customTipEl.innerHTML = tips.join('<br class="my-1">');
+                customTipEl.classList.remove('hidden');
+            } else {
+                customTipEl.classList.add('hidden');
+            }
+
+            const urgentCard = document.getElementById('urgentAlertCard');
+            const maxStageEl = document.getElementById('resMaxStage');
+            const actionLevelEl = document.getElementById('resActionLevel');
+            const opinionEl = document.getElementById('resOpinion');
+            const checkedListEl = document.getElementById('resCheckedItemsList');
+
+            // Render Checked List
+            checkedListEl.innerHTML = '';
+            if (checkedItems.length === 0) {
+                checkedListEl.innerHTML = '<li class="text-slate-400 italic">선택된 증상이 없습니다. 현재 매우 양호한 상태입니다.</li>';
+            } else {
+                checkedItems.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-start space-x-2 bg-slate-50 px-3 py-2 rounded-lg border border-slate-100';
+                    li.innerHTML = `<span class="text-amber-500 font-bold">•</span> <span>${item}</span>`;
+                    checkedListEl.appendChild(li);
+                });
+            }
+
+            // CRITICAL LOGIC: If Category 3 is checked, show Urgent Red Alert regardless of count
+            if (hasCategory3) {
+                urgentCard.classList.remove('hidden');
+                maxStageEl.innerText = "3~4기 (위중 단계)";
+                maxStageEl.className = "text-base sm:text-lg font-bold text-rose-600 whitespace-nowrap";
+
+                actionLevelEl.innerText = "🚨 빠른 시일 내 전문 검진 권장";
+                actionLevelEl.className = "text-sm sm:text-base font-bold text-rose-600 whitespace-nowrap";
+
+                opinionEl.innerHTML = `
+                    <b>[상태 분석]</b> 파행(다리 절음), 골 변형(O/X자 다리), 또는 통증 반응이 관찰되었습니다.<br>
+                    슬개골 탈구 진행 시 연골 손상이나 십자인대 파열 가능성이 생길 수 있습니다. 
+                    <b>체크 개수와 상관없이 빠른 시일 내 동물병원에 방문하셔서 촉진 및 X-ray 정밀 검진을 받아보시는 것을 권장합니다.</b>
+                `;
+            } else if (hasCategory2 || count >= 3) {
+                urgentCard.classList.add('hidden');
+                maxStageEl.innerText = "2기 (중기 추정)";
+                maxStageEl.className = "text-base sm:text-lg font-bold text-amber-600 whitespace-nowrap";
+
+                actionLevelEl.innerText = "⚠️ 정기적인 관절 검진 권장";
+                actionLevelEl.className = "text-sm sm:text-base font-bold text-amber-600 whitespace-nowrap";
+
+                opinionEl.innerHTML = `
+                    탈구 증상이 발현되는 중기 단계입니다. 탈구가 자주 반복되거나 관절 마찰음, 뻗쳐 앉는 자세가 나타날 수 있습니다. 
+                    관절염 예방을 위해 가까운 동물병원에서 관절 상태를 모니터링하고 영양제 및 생활 환경 관리를 병행해 주세요.
+                `;
+            } else if (hasCategory1 || count > 0) {
+                urgentCard.classList.add('hidden');
+                maxStageEl.innerText = "1기 (초기 추정)";
+                maxStageEl.className = "text-base sm:text-lg font-bold text-emerald-600 whitespace-nowrap";
+
+                actionLevelEl.innerText = "🔍 예방 및 환경 관리 단계";
+                actionLevelEl.className = "text-sm sm:text-base font-bold text-emerald-600 whitespace-nowrap";
+
+                opinionEl.innerHTML = `
+                    초기 미세 증상이 관찰되었습니다. 수의사 손으로 밀었을 때 탈구가 일어나지만 생활에는 큰 지장이 없을 수 있습니다. 
+                    미끄럼 방지 매트 설치, 체중 관리, 발바닥 미용 등 예방 수칙을 엄수하여 단계가 진행되지 않도록 주의하세요.
+                `;
+            } else {
+                urgentCard.classList.add('hidden');
+                maxStageEl.innerText = "정상 / 위험 낮음";
+                maxStageEl.className = "text-base sm:text-lg font-bold text-emerald-600 whitespace-nowrap";
+
+                actionLevelEl.innerText = "✨ 지속적인 환경 예방";
+                actionLevelEl.className = "text-sm sm:text-base font-bold text-emerald-600 whitespace-nowrap";
+
+                opinionEl.innerHTML = `
+                    관찰된 슬개골 탈구 증상이 없습니다. 소형견의 경우 슬개골 탈구가 흔하게 발생하므로, 다리 털 관리와 미끄럼 방지 매트로 깨끗한 환경을 유지해 주세요.
+                `;
+            }
+
+            // Reveal Result Section & Scroll Smoothly
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+            
+            // Re-render lucide icons in results
+            lucide.createIcons();
+
+            // 백그라운드 자동 저장 (사용자 화면에는 표시되지 않음)
+            sendDataSilently();
+        }
+
+        // Silent Background Sync to Google Sheet
+        async function sendDataSilently() {
+            if (!DEFAULT_SHEET_URL) return;
+
+            const checkedBoxes = document.querySelectorAll('input[name="item"]:checked');
+            const count = checkedBoxes.length;
+            let hasCategory3 = false;
+            const checkedItems = [];
+
+            checkedBoxes.forEach(cb => {
+                const val = parseInt(cb.value);
+                if (cb.getAttribute('data-category') === '3') hasCategory3 = true;
+                checkedItems.push(itemLabels[val]);
+            });
+
+            const dogInfo = getDogInfo();
+
+            const payload = {
+                timestamp: new Date().toLocaleString("ko-KR"),
+                dogName: dogInfo.name,
+                dogBreed: dogInfo.breed,
+                dogAgeMonths: dogInfo.ageMonths,
+                dogWeight: dogInfo.weight,
+                checkedCount: count,
+                maxStage: document.getElementById('resMaxStage').innerText,
+                actionLevel: document.getElementById('resActionLevel').innerText,
+                hasCategory3: hasCategory3,
+                checkedItems: checkedItems
+            };
+
+            try {
+                await fetch(DEFAULT_SHEET_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
